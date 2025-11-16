@@ -32,7 +32,7 @@ def record_to_mcq_sample(record: dict) -> MCQSample:
 
 
 @task
-def gpqa_diamond() -> Task:
+def gpt_oss_gpqa_diamond() -> Task:
     """Evaluate the GPQA Diamond dataset (MCQ Abstracted)."""
     return MCQEval(
         name="gpqa_diamond",
