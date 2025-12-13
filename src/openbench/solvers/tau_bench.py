@@ -49,7 +49,7 @@ def _ensure_tau2_logging_redirected() -> None:
         return
 
     try:
-        from loguru import logger as loguru_logger  # type: ignore
+        from loguru import logger as loguru_logger  # type: ignore[import-not-found]
     except ImportError:
         _tau2_logging_configured = True
         return

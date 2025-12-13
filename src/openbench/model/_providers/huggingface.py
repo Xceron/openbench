@@ -39,6 +39,7 @@ class HFInferenceProvidersAPI(OpenAICompatibleAPI):
         base_url: str | None = None,
         api_key: str | None = None,
         config: GenerateConfig = GenerateConfig(),
+        stream: bool | None = None,
         **model_args: Any,
     ) -> None:
         # Remove provider prefix
@@ -59,6 +60,7 @@ class HFInferenceProvidersAPI(OpenAICompatibleAPI):
             config=config,
             service="huggingface",
             service_base_url=self.DEFAULT_BASE_URL,
+            stream=stream is not False,
             **model_args,
         )
 
