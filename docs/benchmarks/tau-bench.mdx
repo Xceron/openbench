@@ -1,0 +1,48 @@
+---
+title: "TauBench"
+description: "Run tau2-bench agent evaluations directly from openbench."
+---
+
+## Overview
+
+TauBench brings Sierra Research's [`tau2-bench`](https://github.com/sierra-research/tau2-bench) dual-control agent simulations into openbench. Each domain (retail, airline, telecom) pairs a model under evaluation with a simulated user, and both parties can invoke domain-specific tools while following the official tau2 policies and scoring logic.
+
+## Installation
+
+TauBench is an optional dependency because it requires the upstream `tau2` package and several hundred megabytes of scenario data. Install the extra before running:
+
+```bash
+uv pip install -e '.[tau_bench]'
+```
+
+The first run automatically downloads the tau2 data into `~/.openbench/tau2` (or use `TAU2_DATA_DIR` to point at an existing checkout).
+
+## Usage
+
+```bash
+# Evaluate a model on the retail scenarios
+bench eval tau_bench_retail \
+  --model "openrouter/openai/gpt-oss-120b" \
+  -M only=groq \
+  --task-arg user_model="openai/gpt-4.1-mini" \
+  --task-arg num_trials=2
+```
+
+Task arguments mirror tau2's configuration:
+
+- `user_model`: model used by the simulated customer (default `openai/gpt-4.1-mini`)
+- `num_trials`: repeat each task multiple times
+- `max_steps` / `max_errors`: guard rails for long or error-prone conversations
+- `task_ids` / `num_tasks`: focus on a subset of tau2 tasks without editing the source JSON
+
+Generated logs include the full tau2 trajectory plus the official reward breakdown, so you can audit failures or export them via `bench export`.
+
+## Domains
+
+| Benchmark | Description |
+| --- | --- |
+| `tau_bench_retail` | E-commerce support flows covering exchanges, refunds, and loyalty programs |
+| `tau_bench_airline` | Airline operations, including itinerary changes, vouchers, and irregular ops |
+| `tau_bench_telecom` | Telecom troubleshooting with dual tool access (agent + user) |
+
+All TauBench benchmarks are marked `--alpha` while the integration stabilizes, so add `--alpha` when evaluating.
